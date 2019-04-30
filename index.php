@@ -1,6 +1,7 @@
 <?php
 session_name('mapa_gis');
 session_start();
+
 /*
 if(!isset($_SESSION['validado'])){
     echo 'Acceso no autorizado';
