@@ -118,11 +118,12 @@ $_SESSION['usuario'] = 'carlosg'
         map.addLayer(overlay_CapabaseGIS_0);
 
         var WMS50 = new wms_GIS("http://172.25.50.50:8080/geoserver/wms?", {
+            crs: L.CRS.Simple,
             format: 'image/png',
             uppercase: true,
             transparent: true,
             version: '1.3.0',
-            continuousWorld : true,
+            continuousWorld : false,
             tiled: true,
             attribution: "Direccion Gral de GIS",
             info_format: 'application/json',
