@@ -1,22 +1,4 @@
-<?php
-session_name('mapa_gis');
-session_start();
-
-/*
-if(!isset($_SESSION['validado'])){
-    echo 'Acceso no autorizado';
-    header('location: login/');
-    exit;
-}
-
-if($_SESSION['validado']!='SI'){
-    echo 'Acceso no autorizado';
-    header('location: login/');
-    exit;
-}
-*/
-$_SESSION['usuario'] = 'carlosg'
-?><!doctype html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -37,6 +19,14 @@ $_SESSION['usuario'] = 'carlosg'
             margin: 0;
         }
         #map { cursor: default; }
+        #logo-mcc {
+            position: absolute;
+            top: 10px;
+            left: 128px;
+            width: 200px; 
+            z-index: 1501;
+        }
+        #logo-mcc > img { width: 170px; }
         .salir {
             z-index: 1500;
             position: absolute;
@@ -54,6 +44,8 @@ $_SESSION['usuario'] = 'carlosg'
         <button type="button" class="btn btn-info salir" id="btnSalir">Salir</button>
 
         <div id="map"></div>
+
+        <div id="logo-mcc"><img src="../images/escudo-municipalidad.png" alt=""></div>
 
         <script src="js/leaflet.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
@@ -104,7 +96,7 @@ $_SESSION['usuario'] = 'carlosg'
             opacity: 1.0
         });
         
-        var overlay_CapabaseGIS_0 = L.WMS.layer("http://172.25.50.50:8080/geoserver/wms?version=1.3.0&", "wvca", {
+        var overlay_CapabaseGIS_0 = L.WMS.layer("http://172.25.50.50:8080/geoserver/wms?version=1.1.1&", "wvca", {
             format: 'image/png',
             uppercase: true,
             transparent: true,
@@ -118,12 +110,11 @@ $_SESSION['usuario'] = 'carlosg'
         map.addLayer(overlay_CapabaseGIS_0);
 
         var WMS50 = new wms_GIS("http://172.25.50.50:8080/geoserver/wms?", {
-            crs: L.CRS.Simple,
             format: 'image/png',
             uppercase: true,
             transparent: true,
-            version: '1.3.0',
-            continuousWorld : false,
+            version: '1.1.1',
+            continuousWorld : true,
             tiled: true,
             attribution: "Direccion Gral de GIS",
             info_format: 'application/json',
@@ -132,24 +123,29 @@ $_SESSION['usuario'] = 'carlosg'
 
         var mantenimientoSumideros = WMS50.getLayer("plan_hidrico:vw_mantenimiento_sumideros");
 
-        var mantenimientoPluviales = WMS50.getLayer("plan_hidrico:vw_mantenimiento_pluviales")        
+        var mantenimientoPluviales = WMS50.getLayer("plan_hidrico:vw_mantenimiento_pluviales");
+
+        var lyr_calle = WMS50.getLayer("w_red_vial:vw_ide_calle");
+
+        //var grp_capa_base = L.layerGroup([overlay_CapabaseGIS_0, lyr_calle]);
+
+        //map.addLayer(grp_capa_base);
 
         var osmGeocoder = new L.Control.OSMGeocoder({
             collapsed: false,
             position: 'topleft',
-            text: 'Search',
+            text: 'Search'
         });
-
-        //osmGeocoder.addTo(map);
 
         var baseMaps = {
             "Google Satelite": overlay_GooglecnSatellite_0,
-            "Capa base GIS": overlay_CapabaseGIS_0,
+            "Capa base GIS": overlay_CapabaseGIS_0
         };
 
         L.control.layers(baseMaps,{
             "Restituci&oacute;n Pluviales": mantenimientoPluviales,
-            "Restituci&oacute;n Sumideros": mantenimientoSumideros
+            "Restituci&oacute;n Sumideros": mantenimientoSumideros,
+            "calles": lyr_calle
         },{
             collapsed:false
         }).addTo(map);
