@@ -7,22 +7,34 @@ $nombre_calle = strtoupper($_POST['nombre_calle']);
 $qry_calle = "SELECT st_asgeojson(ST_Transform(ST_SetSrid(the_geom_calles, 22185), 4326))::json as \"geometry\"
               FROM gismcc.calles 
               WHERE nombre_calles 
-              LIKE '%$nombre_calle%'
-              LIMIT 2";
+              LIKE '%$nombre_calle%'";
 
 $rst_calle = $conPdoPg->query($qry_calle);
 
-$reg_calle = $rst_calle->fetchAll(PDO::FETCH_ASSOC);
+//$reg_calle = $rst_calle->fetchAll(PDO::FETCH_ASSOC);
 
-/*
-$a = '[{
-    "type": "LineString",
-    "coordinates": [[5615135.4757464,6962341.25639507],[5615149.626489,6962473.21879052]]
-}]';
+$ret = '';
+$c = 0; // contador de ciclos
 
-echo json_encode($a);
-*/
-echo json_encode($reg_calle);
+if($rst_calle->rowCount() == 0){
+    echo -1; // no hay resultados
+    exit;
+}
+
+while( $reg_calle = $rst_calle->fetchObject()){
+    if($c > 0) { 
+
+        $ret .= ',';
+
+    }
+
+    $ret .=  $reg_calle->geometry;
+
+    $c++;
+}
+
+
+echo '[' . $ret . ']'; // devuelve un string geojson
 
 exit();
 ?>

@@ -199,7 +199,7 @@
                                 "weight": 5,
                                 "opacity": 0.65
                             };
-
+/*
                             var myLines = [{
                                 "type": "LineString",
                                 "coordinates": [[-58.8352257280014,-27.464359678427],[-58.8350951127033,-27.4631678486613]]
@@ -207,11 +207,11 @@
                                 "type": "LineString",
                                 "coordinates": [[-58.8353568459458,-27.4654565286634],[-58.8352257280014,-27.464359678427]]
                             }];
-
-                            omnivore.geojson(JSON.parse(response)).addTo(map);
-
+*/
+                            // var c = '[' + response + ']';
                            
                             L.geoJSON(JSON.parse(response), {style: myStyle}).addTo(map);
+                            // L.geoJSON(response, {style: myStyle}).addTo(map);
                         }
                     });
                 })
