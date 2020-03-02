@@ -1,8 +1,7 @@
 <?php
 require_once('conPDO1921681051.php');
 
-// $nombre_calle = htmlentities(strtoupper($_POST['nombre_calle']));
-$nombre_calle = strtoupper($_POST['nombre_calle']);
+$nombre_calle = htmlentities(strtoupper($_POST['nombre_calle']));
 
 if($nombre_calle == ""){
     echo -1; // no hay resultados
@@ -14,11 +13,6 @@ $qry_calle = "SELECT st_asgeojson(ST_Transform(ST_SetSrid(the_geom_calles, 22185
               FROM gismcc.calles 
               WHERE nombre_calles 
               LIKE '%$nombre_calle%'";
-
-/*$qry_calle = "SELECT st_asgeojson(ST_Transform(ST_SetSrid(the_geom_calles, 22185), 4326))::json as \"geometry\"
-              FROM gismcc.calles 
-              WHERE nombre_calles 
-              LIKE '%$nombre_calle%' and altur_par= 300";*/
 
 $rst_calle = $conPdoPg->query($qry_calle);
 
